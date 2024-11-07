@@ -4,9 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <locale.h>
 
 int main(int argc, char const *argv[])
 {
+    setlocale(LC_ALL, "");
     if (argc < 2)
     {
         fprintf(stderr, "Usage: nihonC <file>.nihonC\n");
@@ -38,13 +40,25 @@ int main(int argc, char const *argv[])
     strcat(new_filename, ".c");
 
     FILE *new_file = fopen(new_filename, "w");
-    free(filename);
-    free(new_filename);
+    
 
-    //write the header of the new file
+    //write translate and write new file
     char line[256];
     while (fgets(line, sizeof(line), file))
     {
+        size_t len = strlen(line);
+        if (len > 0 && line[len - 1] == '\n') {
+            len--;
+        }
+
+        // Check if the line ends with a 。
+        if (len >= 3 && strncmp(&line[len - 3], "\xE3\x80\x82", 3) == 0) {
+            // Replace the last three bytes with a single semicolon
+            line[len - 3] = ';';
+            line[len - 2] = '\n';  // Null-terminate the string after replacing
+            line[len - 1] = '\0';
+        }
+
         fputs(line, new_file);
     }
 
@@ -52,5 +66,22 @@ int main(int argc, char const *argv[])
     fclose(new_file);
     
 
+    
+    
+    //compile the new file using gcc
+    size_t base_length = strlen(new_filename) - 2;
+    size_t command_length = strlen("gcc ") + strlen(new_filename) + strlen(" -o ") + base_length + strlen(".exe") + 1;
+
+    char *command = malloc(command_length);
+    strcpy(command, "gcc ");
+    strcat(command, new_filename);
+    strcat(command, " -o ");
+    strncat(command, new_filename, strlen(new_filename) - 2);
+    strcat(command, ".exe");
+    system(command);
+
+
+    free(filename);
+    free(new_filename);
     return 0;
 }

@@ -9,4 +9,6 @@ compile: nihonC.exe
 	./nihonC.exe $(ARGS)
 
 clean:
-	del nihonC.exe
+	del *.exe
+	cd testfiles && del *.c
+	cd testfiles && del *.exe

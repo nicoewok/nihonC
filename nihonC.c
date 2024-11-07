@@ -1,10 +1,6 @@
 //This is the main program. It translates .nihon files to .c files and compiles them.
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <locale.h>
+#include "nihonC.h"
 
 int main(int argc, char const *argv[])
 {
@@ -51,13 +47,7 @@ int main(int argc, char const *argv[])
             len--;
         }
 
-        // Check if the line ends with a 。
-        if (len >= 3 && strncmp(&line[len - 3], "\xE3\x80\x82", 3) == 0) {
-            // Replace the last three bytes with a single semicolon
-            line[len - 3] = ';';
-            line[len - 2] = '\n';  // Null-terminate the string after replacing
-            line[len - 1] = '\0';
-        }
+        replace_line_ending(line, len);
 
         fputs(line, new_file);
     }

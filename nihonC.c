@@ -40,7 +40,7 @@ int main(int argc, char const *argv[])
 
     //write translate and write new file
     char line[256];
-    void *new_line = calloc(256, sizeof(char));
+    char *new_line = calloc(256, sizeof(char));
     while (fgets(line, sizeof(line), file))
     {
         size_t len = strlen(line);
@@ -63,7 +63,8 @@ int main(int argc, char const *argv[])
             first_token = 0;
             
             //do checks and replace if needed
-            replacement += replace_keyword(token, new_line);
+            replacement += replace_type(token, new_line);
+            replacement += replace_bracket(token, new_line);
             
             if (replacement == 0) {
                 strcat(new_line, token);
@@ -74,11 +75,15 @@ int main(int argc, char const *argv[])
             token = strtok(NULL, " ");
         }
 
+        //check if \n is actually there
+        if (new_line[strlen(new_line) - 1] != '\n')
+            strcat(new_line, "\n");
+
         fputs(new_line, new_file);
         memset(new_line, 0, 256);
     }
 
-    free(new_line);
+    free((void *) new_line);
     fclose(file);
     fclose(new_file);
     

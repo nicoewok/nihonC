@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-イント main() {
+イント main() 「
     イント myInt = 10。
     チャル myChar = 'A'。
     フロート myFloat = 3.14。
@@ -10,4 +10,4 @@
     printf("Float: %.2f\n", myFloat)。
 
     return 0。
-}
+」

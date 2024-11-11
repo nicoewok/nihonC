@@ -49,7 +49,7 @@ int is_type(char *token)
 }
 
 //Replace katakan type names with C type names
-int replace_keyword(char *token, char *new_line)
+int replace_type(char *token, char *new_line)
 {
     int type = is_type(token);
     if (type != -1)
@@ -78,4 +78,18 @@ int replace_keyword(char *token, char *new_line)
     {
         return 0;
     }
+}
+
+//Replace brackets
+int replace_bracket(char *token, char *new_line)
+{
+    if (strncmp(token, "「", 3) == 0) {
+        strcat(new_line, "{");
+        return 1;
+    }
+    if (strncmp(token, "」", 3) == 0) {
+        strcat(new_line, "}");
+        return 1;
+    }
+    return 0;
 }

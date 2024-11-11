@@ -7,12 +7,14 @@ This is a list of all syntactical and keyword changes.
 ## Keywords
 
 ### Type names (WIP)
-I changed the most common type names to their Katakana counterpart:
+The most common C type names were converted into  their Katakana counterpart:
+| C type  | Katakana |
+|---------|----------|
+| char    | チャル    |
+| int     | イント    |
+| long    | ロング    |
+| float   | フロート  |
+| double  | ダブル    |
 
-| Katakana | C type |
-|----------|--------|
-| チャル    | char   |
-| イント    | int    |
-| ロング    | long   |
-| フロート  | float  |
-| ダブル    | double |
+### Brackets
+*{* and *}* have been changed to the Japanese *「* and *」*

@@ -1,0 +1,13 @@
+#include <stdio.h>
+
+イント main() {
+    イント myInt = 10。
+    チャル myChar = 'A'。
+    フロート myFloat = 3.14。
+
+    printf("Integer: %d\n", myInt)。
+    printf("Character: %c\n", myChar)。
+    printf("Float: %.2f\n", myFloat)。
+
+    return 0。
+}

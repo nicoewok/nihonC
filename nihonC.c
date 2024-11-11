@@ -40,6 +40,7 @@ int main(int argc, char const *argv[])
 
     //write translate and write new file
     char line[256];
+    void *new_line = calloc(256, sizeof(char));
     while (fgets(line, sizeof(line), file))
     {
         size_t len = strlen(line);
@@ -48,10 +49,36 @@ int main(int argc, char const *argv[])
         }
 
         replace_line_ending(line, len);
+        add_tabs(line, new_line);
 
-        fputs(line, new_file);
+        //tokenize the line
+        char *token = strtok(line, " ");
+        int first_token = 1; //for adding spaces between tokens
+        int replacement = 0;
+        while (token != NULL)
+        {
+            if (!first_token) {
+                strcat(new_line, " ");
+            }
+            first_token = 0;
+            
+            //do checks and replace if needed
+            replacement += replace_keyword(token, new_line);
+            
+            if (replacement == 0) {
+                strcat(new_line, token);
+            }
+            replacement = 0;
+
+            //go to next token
+            token = strtok(NULL, " ");
+        }
+
+        fputs(new_line, new_file);
+        memset(new_line, 0, 256);
     }
 
+    free(new_line);
     fclose(file);
     fclose(new_file);
     

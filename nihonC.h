@@ -93,3 +93,133 @@ int replace_bracket(char *token, char *new_line)
     }
     return 0;
 }
+
+//Detect kara and made
+int detect_for(char *line)
+{
+    int kara_counter = 0, made_counter = 0;
+    
+    //copy line and tokenize the line
+    char *line_copy = malloc(256);
+    strncpy(line_copy, line, 256);
+    char *token = strtok(line_copy, " ");
+    while (token != NULL)
+    {
+        if (strcmp(token, "から") == 0) {
+            kara_counter++;
+        }
+        if (strcmp(token, "まで") == 0) {
+            made_counter++;
+        }
+        token = strtok(NULL, " ");
+    }
+
+    free((void *) line_copy);
+    if (kara_counter == 1 && made_counter == 1) {
+        return 1;
+    }
+    return 0;
+}
+
+//Replace kara-made with C for loop
+int replace_for(char *line, char *new_line)
+{
+    if (detect_for(line) == 0) {
+        return 0;
+    }
+ 
+    //copy line
+    char *line_copy = malloc(256);
+    strncpy(line_copy, line, 256);
+    
+    //getting variable type
+    char *token = strtok(line_copy, " ");
+    int type = is_type(token);
+    if (type == -1) {
+        free((void *) line_copy);
+        return 0;
+    }
+
+    //get lower bound
+    token = strtok(NULL, " ");
+    char *lower_bound = calloc(256, sizeof(char));
+    strncpy(lower_bound, token, strlen(token));
+
+    token = strtok(NULL, " ");
+    if (strcmp(token, "から") != 0) {
+        free((void *) line_copy);
+        return 0;
+    }
+
+    //get upper bound
+    token = strtok(NULL, " ");
+    char *upper_bound = calloc(256, sizeof(char));
+    strncpy(upper_bound, token, strlen(token));
+
+    token = strtok(NULL, " ");
+    if (strcmp(token, "まで") != 0) {
+        free((void *) line_copy);
+        return 0;
+    }
+
+    //get increment variable name
+    token = strtok(NULL, " ");
+    char *increment = calloc(256, sizeof(char));
+    strncpy(increment, token, strlen(token));
+
+    //write C for loop into new_line
+    switch (type)
+    {
+        case 0:
+            strcat(new_line, "for (char ");
+            break;
+        case 1:
+            strcat(new_line, "for (int ");
+            break;
+        case 2:
+            strcat(new_line, "for (long ");
+            break;
+        case 3:
+            strcat(new_line, "for (float ");
+            break;
+        case 4:
+            strcat(new_line, "for (double ");
+            break;
+    }
+    strcat(new_line, increment);
+    strcat(new_line, " = ");
+    strcat(new_line, lower_bound);
+    strcat(new_line, "; ");
+    strcat(new_line, increment);
+    strcat(new_line, " <= ");
+    strcat(new_line, upper_bound);
+    strcat(new_line, "; ");
+    strcat(new_line, increment);
+    strcat(new_line, "++)");
+    free(lower_bound);
+    free(upper_bound);
+    free(increment);
+
+    //write the rest of the line with correct checks
+    token = strtok(NULL, " ");
+    int replacement = 0;
+    while (token != NULL)
+    {
+        strcat(new_line, " ");
+        //do checks and replace if needed
+        replacement += replace_type(token, new_line);
+        replacement += replace_bracket(token, new_line);
+        
+        if (replacement == 0) {
+            strcat(new_line, token);
+        }
+        replacement = 0;
+
+        //go to next token
+        token = strtok(NULL, " ");
+    }
+
+    free((void *) line_copy);
+
+    return 1;
+}

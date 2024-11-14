@@ -1,6 +1,7 @@
 //This is the main program. It translates .nihon files to .c files and compiles them.
 
 #include "nihonC.h"
+#define COMPILE
 
 int main(int argc, char const *argv[])
 {
@@ -50,29 +51,34 @@ int main(int argc, char const *argv[])
 
         replace_line_ending(line, len);
         add_tabs(line, new_line);
+        //complex replacements
+        int complex_replacement = 0;
+        complex_replacement += replace_for(line, new_line);
 
         //tokenize the line
         char *token = strtok(line, " ");
         int first_token = 1; //for adding spaces between tokens
         int replacement = 0;
-        while (token != NULL)
-        {
-            if (!first_token) {
-                strcat(new_line, " ");
-            }
-            first_token = 0;
-            
-            //do checks and replace if needed
-            replacement += replace_type(token, new_line);
-            replacement += replace_bracket(token, new_line);
-            
-            if (replacement == 0) {
-                strcat(new_line, token);
-            }
-            replacement = 0;
+        if (complex_replacement == 0) {
+            while (token != NULL)
+            {
+                if (!first_token) {
+                    strcat(new_line, " ");
+                }
+                first_token = 0;
+                
+                //do checks and replace if needed
+                replacement += replace_type(token, new_line);
+                replacement += replace_bracket(token, new_line);
+                
+                if (replacement == 0) {
+                    strcat(new_line, token);
+                }
+                replacement = 0;
 
-            //go to next token
-            token = strtok(NULL, " ");
+                //go to next token
+                token = strtok(NULL, " ");
+            }
         }
 
         //check if \n is actually there
@@ -91,6 +97,7 @@ int main(int argc, char const *argv[])
     
     
     //compile the new file using gcc
+    #ifdef COMPILE
     size_t base_length = strlen(new_filename) - 2;
     size_t command_length = strlen("gcc ") + strlen(new_filename) + strlen(" -o ") + base_length + strlen(".exe") + 1;
 
@@ -101,6 +108,7 @@ int main(int argc, char const *argv[])
     strncat(command, new_filename, strlen(new_filename) - 2);
     strcat(command, ".exe");
     system(command);
+    #endif
 
 
     free(filename);

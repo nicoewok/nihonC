@@ -1,0 +1,27 @@
+#include <stdio.h>
+
+int main() 「
+    int i;
+
+    // If statement
+    int number = 10。
+    if (number > 5) 「
+        printf("Number is greater than 5\n")。
+    」 else 「
+        printf("Number is 5 or less\n")。
+    」
+
+    // While loop
+    イント count = 0。
+    while (count < 5) 「
+        printf("Count is %d\n", count)。
+        count++。
+    」
+
+    // For loop
+    イント 0 から 5 まで i 「
+        printf("i is %d\n", i)。
+    」
+
+    return 0。
+」

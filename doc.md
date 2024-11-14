@@ -18,3 +18,17 @@ The most common C type names were converted into  their Katakana counterpart:
 
 ### Brackets
 *{* and *}* have been changed to the Japanese *「* and *」*
+
+### For loops
+The syntax of for loops have changed:
+```C
+[type] [lower bound] から [upper bound] まで [variable name]
+```
+Example:
+```C
+イント 0 から 5 まで i
+//turns into
+for (i = 0; i <= 5; i++)
+```
+
+To be more precise you can always use the C for loop as well.

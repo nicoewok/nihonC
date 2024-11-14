@@ -68,8 +68,7 @@ int main(int argc, char const *argv[])
                 first_token = 0;
                 
                 //do checks and replace if needed
-                replacement += replace_type(token, new_line);
-                replacement += replace_bracket(token, new_line);
+                replacement += replace_token(token, new_line);
                 
                 if (replacement == 0) {
                     strcat(new_line, token);

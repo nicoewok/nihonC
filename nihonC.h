@@ -7,8 +7,18 @@
 //This file contains all functions used to check the line
 void replace_line_ending(char *line, size_t len);
 void add_tabs(char *line, char *new_line);
+int replace_token(char *token, char *new_line);
 int replace_type(char *token, char *new_line);
+int replace_bracket(char *token, char *new_line);
+int replace_for(char *line, char *new_line);
 
+//execute check/replace functions on token in line
+int replace_token(char *token, char *new_line) {
+    int replacement = 0;
+    replacement += replace_type(token, new_line);
+    replacement += replace_bracket(token, new_line);
+    return replacement;
+}
 
 //Replace 。 with ;
 void replace_line_ending(char *line, size_t len)
@@ -80,7 +90,7 @@ int replace_type(char *token, char *new_line)
     }
 }
 
-//Replace brackets
+//Replace 「」brackets
 int replace_bracket(char *token, char *new_line)
 {
     if (strncmp(token, "「", 3) == 0) {
@@ -121,7 +131,7 @@ int detect_for(char *line)
     return 0;
 }
 
-//Replace kara-made with C for loop
+//Replace ... から ... まで with C for loop
 int replace_for(char *line, char *new_line)
 {
     if (detect_for(line) == 0) {
@@ -207,8 +217,7 @@ int replace_for(char *line, char *new_line)
     {
         strcat(new_line, " ");
         //do checks and replace if needed
-        replacement += replace_type(token, new_line);
-        replacement += replace_bracket(token, new_line);
+        replacement += replace_token(token, new_line);
         
         if (replacement == 0) {
             strcat(new_line, token);

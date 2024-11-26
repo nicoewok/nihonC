@@ -32,3 +32,16 @@ for (i = 0; i <= 5; i++)
 ```
 
 To be more precise you can always use the C for loop as well.
+
+
+### Assignments
+The syntax of assignments have been changed to fit Japanese grammar:
+```C
+... は ... です。
+```
+Example:
+```C
+イント count は 0 です。
+//turns into
+int count = 0;
+```

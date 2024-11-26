@@ -1,0 +1,8 @@
+#include <stdio.h>
+
+int main() 「
+    // While loop
+    イント count は 0 です。
+
+    return 0。
+」

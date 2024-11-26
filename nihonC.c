@@ -54,6 +54,7 @@ int main(int argc, char const *argv[])
         //complex replacements
         int complex_replacement = 0;
         complex_replacement += replace_for(line, new_line);
+        complex_replacement += replace_assignment(line, new_line);
 
         //tokenize the line
         char *token = strtok(line, " ");

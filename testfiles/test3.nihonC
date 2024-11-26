@@ -3,7 +3,23 @@
 int main() 「
     int i;
 
-    // If statement
+    enum Level {
+        LOW,
+        MEDIUM,
+        HIGH
+    };
+
+    struct Person {
+        char name[100];
+        int age;
+    };
+
+    union Data {
+        int i;
+        float f;
+        char str[20];
+    };
+    //If statement
     int number = 10。
     if (number > 5) 「
         printf("Number is greater than 5\n")。
@@ -12,7 +28,7 @@ int main() 「
     」
 
     // While loop
-    イント count = 0。
+    イント count は 0 です。
     while (count < 5) 「
         printf("Count is %d\n", count)。
         count++。
@@ -22,6 +38,7 @@ int main() 「
     イント 0 から 5 まで i 「
         printf("i is %d\n", i)。
     」
+    
 
     return 0。
 」

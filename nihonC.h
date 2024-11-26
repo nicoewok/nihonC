@@ -11,6 +11,7 @@ int replace_token(char *token, char *new_line);
 int replace_type(char *token, char *new_line);
 int replace_bracket(char *token, char *new_line);
 int replace_for(char *line, char *new_line);
+int replace_assignment(char *line, char *new_line);
 
 //execute check/replace functions on token in line
 int replace_token(char *token, char *new_line) {
@@ -21,8 +22,7 @@ int replace_token(char *token, char *new_line) {
 }
 
 //Replace 。 with ;
-void replace_line_ending(char *line, size_t len)
-{
+void replace_line_ending(char *line, size_t len) {
     if (len >= 3 && strncmp(&line[len - 3], "。", 3) == 0) { //。is three bytes long
         line[len - 3] = ';';
         line[len - 2] = '\n';  //new line after ;
@@ -43,8 +43,7 @@ void add_tabs(char *line, char *new_line) {
 //Check for type names
 //Returns 0 for char, 1 for int, 2 for long, 3 for float, 4 for double
 //Returns -1 if not a type
-int is_type(char *token)
-{
+int is_type(char *token) {
     if (strcmp(token, "チャル") == 0)
         return 0;
     if (strcmp(token, "イント") == 0)
@@ -59,8 +58,7 @@ int is_type(char *token)
 }
 
 //Replace katakan type names with C type names
-int replace_type(char *token, char *new_line)
-{
+int replace_type(char *token, char *new_line) {
     int type = is_type(token);
     if (type != -1)
     {
@@ -91,8 +89,7 @@ int replace_type(char *token, char *new_line)
 }
 
 //Replace 「」brackets
-int replace_bracket(char *token, char *new_line)
-{
+int replace_bracket(char *token, char *new_line) {
     if (strncmp(token, "「", 3) == 0) {
         strcat(new_line, "{");
         return 1;
@@ -105,8 +102,7 @@ int replace_bracket(char *token, char *new_line)
 }
 
 //Detect kara and made
-int detect_for(char *line)
-{
+int detect_for(char *line) {
     int kara_counter = 0, made_counter = 0;
     
     //copy line and tokenize the line
@@ -132,8 +128,7 @@ int detect_for(char *line)
 }
 
 //Replace ... から ... まで with C for loop
-int replace_for(char *line, char *new_line)
-{
+int replace_for(char *line, char *new_line) {
     if (detect_for(line) == 0) {
         return 0;
     }
@@ -219,6 +214,85 @@ int replace_for(char *line, char *new_line)
         //do checks and replace if needed
         replacement += replace_token(token, new_line);
         
+        if (replacement == 0) {
+            strcat(new_line, token);
+        }
+        replacement = 0;
+
+        //go to next token
+        token = strtok(NULL, " ");
+    }
+
+    free((void *) line_copy);
+
+    return 1;
+}
+
+//Detect は　...　です
+int detect_assignment(char *line)
+{
+    int wa_counter = 0, desu_counter = 0;
+    
+    //copy line and tokenize the line
+    char *line_copy = malloc(256);
+    strncpy(line_copy, line, 256);
+    char *token = strtok(line_copy, " ");
+    while (token != NULL)
+    {
+        if (strcmp(token, "は") == 0) {
+            wa_counter++;
+        }
+        if (strncmp(token, "です", 6) == 0) {
+            desu_counter++;
+        }
+        token = strtok(NULL, " ");
+    }
+
+    free((void *) line_copy);
+    if (wa_counter == 1 && desu_counter == 1) {
+        return 1;
+    }
+    return 0;
+}
+
+
+//Replace は ... です with C assignment
+int replace_assignment(char *line, char *new_line) {
+    if (detect_assignment(line) == 0) {
+        return 0;
+    }
+ 
+    //copy line
+    char *line_copy = malloc(256);
+    strncpy(line_copy, line, 256);
+    char *token = strtok(line_copy, " ");
+
+    //write the rest of the line with correct checks
+    //replace は with =, remove です
+    int first_token = 1;
+    int replacement = 0;
+    while (token != NULL)
+    {
+        //if we reached the end, no " " needed
+        if (strncmp(token, "です", 6) == 0) {
+            strcat(new_line, ";");
+            replacement++;
+        } else {
+            if (!first_token) {
+                strcat(new_line, " ");
+            }
+            first_token = 0;
+
+            //check for は
+            if (strcmp(token, "は") == 0) {
+                strcat(new_line, "=");
+                replacement++;
+            } else {
+                //do checks and replace if needed
+                replacement += replace_token(token, new_line);
+            }
+        }
+
         if (replacement == 0) {
             strcat(new_line, token);
         }

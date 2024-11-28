@@ -8,16 +8,19 @@ This is a list of all syntactical and keyword changes.
 
 ### Type names (WIP)
 The most common C type names were converted into  their Katakana counterpart:
-| C type  | Katakana |
-|---------|----------|
-| char    | チャル    |
-| int     | イント    |
-| long    | ロング    |
-| float   | フロート  |
-| double  | ダブル    |
+| C type  | Katakana        |
+|---------|-----------------|
+| char    | 文字            |
+| int     | 整数            |
+| long    | ロング          |
+| float   | 浮動小数点       |
+| double  | 倍精度浮動小数点 |
+
+### Const
+The **const** keyword was changed to **定数**
 
 ### Brackets
-*{* and *}* have been changed to the Japanese *「* and *」*
+**{** and **}** have been changed to the Japanese **「** and **」**
 
 ### For loops
 The syntax of for loops have changed:

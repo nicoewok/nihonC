@@ -41,19 +41,21 @@ void add_tabs(char *line, char *new_line) {
 }
 
 //Check for type names
-//Returns 0 for char, 1 for int, 2 for long, 3 for float, 4 for double
+//Returns 0 for char, 1 for int, 2 for long, 3 for float, 4 for double, 5 for const
 //Returns -1 if not a type
 int is_type(char *token) {
-    if (strcmp(token, "チャル") == 0)
+    if (strcmp(token, "文字") == 0)
         return 0;
-    if (strcmp(token, "イント") == 0)
+    if (strcmp(token, "整数") == 0)
         return 1;
     if (strcmp(token, "ロング") == 0)
         return 2;
-    if (strcmp(token, "フロート") == 0)
+    if (strcmp(token, "浮動小数点") == 0)
         return 3;
-    if (strcmp(token, "ダブル") == 0)
+    if (strcmp(token, "倍精度浮動小数点") == 0)
         return 4;
+    if (strcmp(token, "定数") == 0)
+        return 5;
     return -1;
 }
 
@@ -64,21 +66,24 @@ int replace_type(char *token, char *new_line) {
     {
         switch (type)
         {
-        case 0:
-            strcat(new_line, "char");
-            break;
-        case 1:
-            strcat(new_line, "int");
-            break;
-        case 2:
-            strcat(new_line, "long");
-            break;
-        case 3:
-            strcat(new_line, "float");
-            break;
-        case 4:
-            strcat(new_line, "double");
-            break;
+            case 0:
+                strcat(new_line, "char");
+                break;
+            case 1:
+                strcat(new_line, "int");
+                break;
+            case 2:
+                strcat(new_line, "long");
+                break;
+            case 3:
+                strcat(new_line, "float");
+                break;
+            case 4:
+                strcat(new_line, "double");
+                break;
+            case 5:
+                strcat(new_line, "const");
+                break;
         }
         return 1;
     }

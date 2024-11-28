@@ -2,7 +2,7 @@
 
 int main() 「
     // While loop
-    イント count は 0 です。
+    整数 count は 0 です。
 
     return 0。
 」

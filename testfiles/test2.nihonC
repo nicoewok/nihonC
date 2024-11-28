@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-イント main() 「
-    イント myInt = 10。
-    チャル myChar = 'A'。
-    フロート myFloat = 3.14。
+整数 main() 「
+    整数 myInt = 10。
+    文字 myChar = 'A'。
+    浮動小数点 myFloat = 3.14。
 
     printf("Integer: %d\n", myInt)。
     printf("Character: %c\n", myChar)。

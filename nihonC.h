@@ -10,14 +10,17 @@ void add_tabs(char *line, char *new_line);
 int replace_token(char *token, char *new_line);
 int replace_type(char *token, char *new_line);
 int replace_bracket(char *token, char *new_line);
+int replace_if_else(char *token, char *new_line);
 int replace_for(char *line, char *new_line);
 int replace_assignment(char *line, char *new_line);
+int complex_replacement(char *line, char *new_line);
 
 //execute check/replace functions on token in line
 int replace_token(char *token, char *new_line) {
     int replacement = 0;
     replacement += replace_type(token, new_line);
     replacement += replace_bracket(token, new_line);
+    replacement += replace_if_else(token, new_line);
     return replacement;
 }
 
@@ -106,9 +109,28 @@ int replace_bracket(char *token, char *new_line) {
     return 0;
 }
 
-//Detect kara and made
-int detect_for(char *line) {
+//Check and replace if-else statements
+int replace_if_else(char *token, char *new_line) {
+    if (strcmp(token, "もし") == 0) {
+        strcat(new_line, "if");
+        return 1;
+    }
+    if (strcmp(token, "それ以外") == 0) {
+        strcat(new_line, "else");
+        return 1;
+    }
+    return 0;
+}
+
+//Check and replace complex grammatical structures
+int complex_replacement(char *line, char *new_line) {
+    int complex_replacement = 0;
+
+    //Detection
+    //for-loop
     int kara_counter = 0, made_counter = 0;
+    //assignment
+    int wa_counter = 0, desu_counter = 0;
     
     //copy line and tokenize the line
     char *line_copy = malloc(256);
@@ -122,14 +144,26 @@ int detect_for(char *line) {
         if (strcmp(token, "まで") == 0) {
             made_counter++;
         }
+        if (strcmp(token, "は") == 0) {
+            wa_counter++;
+        }
+        if (strncmp(token, "です", 6) == 0) {
+            desu_counter++;
+        }
         token = strtok(NULL, " ");
     }
-
     free((void *) line_copy);
+
+    //replace if needed
     if (kara_counter == 1 && made_counter == 1) {
-        return 1;
+        replace_for(line, new_line);
+        complex_replacement++;
     }
-    return 0;
+    if (wa_counter == 1 && desu_counter == 1) {
+        replace_assignment(line, new_line);
+        complex_replacement++;
+    }
+    return complex_replacement;
 }
 
 //Replace ... から ... まで with C for loop
@@ -233,40 +267,8 @@ int replace_for(char *line, char *new_line) {
     return 1;
 }
 
-//Detect は　...　です
-int detect_assignment(char *line)
-{
-    int wa_counter = 0, desu_counter = 0;
-    
-    //copy line and tokenize the line
-    char *line_copy = malloc(256);
-    strncpy(line_copy, line, 256);
-    char *token = strtok(line_copy, " ");
-    while (token != NULL)
-    {
-        if (strcmp(token, "は") == 0) {
-            wa_counter++;
-        }
-        if (strncmp(token, "です", 6) == 0) {
-            desu_counter++;
-        }
-        token = strtok(NULL, " ");
-    }
-
-    free((void *) line_copy);
-    if (wa_counter == 1 && desu_counter == 1) {
-        return 1;
-    }
-    return 0;
-}
-
-
 //Replace は ... です with C assignment
 int replace_assignment(char *line, char *new_line) {
-    if (detect_assignment(line) == 0) {
-        return 0;
-    }
- 
     //copy line
     char *line_copy = malloc(256);
     strncpy(line_copy, line, 256);

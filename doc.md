@@ -23,7 +23,7 @@ The **const** keyword was changed to **定数**
 **{** and **}** have been changed to the Japanese **「** and **」**
 
 ### For loops
-The syntax of for loops have changed:
+The syntax of for-loops have changed:
 ```C
 [type] [lower bound] から [upper bound] まで [variable name]
 ```
@@ -48,3 +48,7 @@ Example:
 //turns into
 int count = 0;
 ```
+
+### If-else
+**if** has been replace by **もし**.
+**else** has been replace by **それ以外**.

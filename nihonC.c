@@ -52,15 +52,13 @@ int main(int argc, char const *argv[])
         replace_line_ending(line, len);
         add_tabs(line, new_line);
         //complex replacements
-        int complex_replacement = 0;
-        complex_replacement += replace_for(line, new_line);
-        complex_replacement += replace_assignment(line, new_line);
+        int com_replacement = complex_replacement(line, new_line);
 
         //tokenize the line
         char *token = strtok(line, " ");
         int first_token = 1; //for adding spaces between tokens
         int replacement = 0;
-        if (complex_replacement == 0) {
+        if (com_replacement == 0) {
             while (token != NULL)
             {
                 if (!first_token) {
@@ -92,8 +90,6 @@ int main(int argc, char const *argv[])
     free((void *) new_line);
     fclose(file);
     fclose(new_file);
-    
-
     
     
     //compile the new file using gcc

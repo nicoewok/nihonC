@@ -168,10 +168,6 @@ int complex_replacement(char *line, char *new_line) {
 
 //Replace ... から ... まで with C for loop
 int replace_for(char *line, char *new_line) {
-    if (detect_for(line) == 0) {
-        return 0;
-    }
- 
     //copy line
     char *line_copy = malloc(256);
     strncpy(line_copy, line, 256);

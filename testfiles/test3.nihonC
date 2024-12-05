@@ -1,29 +1,13 @@
 #include <stdio.h>
 
-int main() 「
-    int i;
+整数 main() 「
+    整数 i;
 
-    enum Level {
-        LOW,
-        MEDIUM,
-        HIGH
-    };
-
-    struct Person {
-        char name[100];
-        int age;
-    };
-
-    union Data {
-        int i;
-        float f;
-        char str[20];
-    };
     //If statement
-    int number = 10。
-    if (number > 5) 「
+    整数 number = 10。
+    もし (number > 5) 「
         printf("Number is greater than 5\n")。
-    」 else 「
+    」 それ以外 「
         printf("Number is 5 or less\n")。
     」
 

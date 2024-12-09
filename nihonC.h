@@ -12,8 +12,14 @@ int replace_type(char *token, char *new_line);
 int replace_bracket(char *token, char *new_line);
 int replace_if_else(char *token, char *new_line);
 int replace_for(char *line, char *new_line);
-int replace_assignment(char *line, char *new_line);
+int replace_assignment(char *line, char *new_line, int operator, int particle);
 int complex_replacement(char *line, char *new_line);
+
+char* operator_particles[] = {"は", "と"};
+char* operators[] = {"=", "==", "!=", ">", "<", ">=", "<="};
+char* operator_jap[] = {"です", "が等しい", "と異なる", "より大きい", "より小さい", "と等しいかより大きい", "と等しいかより小さい"};
+int operator_jap_len[] = {6, 12, 12, 15, 15, 30, 30};
+
 
 //execute check/replace functions on token in line
 int replace_token(char *token, char *new_line) {
@@ -129,9 +135,10 @@ int complex_replacement(char *line, char *new_line) {
     //Detection
     //for-loop
     int kara_counter = 0, made_counter = 0;
-    //assignment
-    int wa_counter = 0, desu_counter = 0;
-    
+    //operators
+    int operator_particle_counter[] = {0, 0};
+    int operator_counter[] = {0, 0, 0, 0, 0, 0, 0};
+
     //copy line and tokenize the line
     char *line_copy = malloc(256);
     strncpy(line_copy, line, 256);
@@ -140,15 +147,17 @@ int complex_replacement(char *line, char *new_line) {
     {
         if (strcmp(token, "から") == 0) {
             kara_counter++;
-        }
-        if (strcmp(token, "まで") == 0) {
+        } else if (strcmp(token, "まで") == 0) {
             made_counter++;
+        } else if (strcmp(token, "は") == 0) {
+            operator_particle_counter[0]++;
+        } else if(strcmp(token, "と") == 0) {
+            operator_particle_counter[1]++;
         }
-        if (strcmp(token, "は") == 0) {
-            wa_counter++;
-        }
-        if (strncmp(token, "です", 6) == 0) {
-            desu_counter++;
+        for (int i = 0; i < 7; i++) {
+            if (strncmp(token, operator_jap[i], operator_jap_len[i]) == 0) {
+                operator_counter[i]++;
+            }
         }
         token = strtok(NULL, " ");
     }
@@ -159,10 +168,23 @@ int complex_replacement(char *line, char *new_line) {
         replace_for(line, new_line);
         complex_replacement++;
     }
-    if (wa_counter == 1 && desu_counter == 1) {
-        replace_assignment(line, new_line);
-        complex_replacement++;
+    if (operator_particle_counter[0] == 1) {
+        for (int i = 0; i < 7; i++) {
+            if (i == 1) //only if particle is と
+                i++;
+            if (operator_counter[i] == 1) {
+                replace_assignment(line, new_line, i, 0);
+                complex_replacement++;
+                break;
+            }
+        }
+    } else if (operator_particle_counter[1] == 1) {
+        if (operator_counter[1] == 1) {
+            replace_assignment(line, new_line, 1, 1);
+            complex_replacement++;
+        }
     }
+
     return complex_replacement;
 }
 
@@ -264,7 +286,8 @@ int replace_for(char *line, char *new_line) {
 }
 
 //Replace は ... です with C assignment
-int replace_assignment(char *line, char *new_line) {
+//operator is 0 for =, 1 for >, 2 for <, 3 for >=, 4 for <=
+int replace_assignment(char *line, char *new_line, int operator, int particle) {
     //copy line
     char *line_copy = malloc(256);
     strncpy(line_copy, line, 256);
@@ -276,19 +299,25 @@ int replace_assignment(char *line, char *new_line) {
     int replacement = 0;
     while (token != NULL)
     {
-        //if we reached the end, no " " needed
-        if (strncmp(token, "です", 6) == 0) {
-            strcat(new_line, ";");
+        //if "deleted", no space needed
+        if (strncmp(token, operator_jap[operator], operator_jap_len[operator]) == 0) {
+            //make copy of token after the keyword
+            char *remaining_part = token + operator_jap_len[operator];
+            char *token_rest = calloc(strlen(remaining_part) + 1, sizeof(char));
+
+            strncpy(token_rest, remaining_part, strlen(remaining_part));
+            strcat(new_line, token_rest);            
             replacement++;
+
+            free(token_rest);
         } else {
             if (!first_token) {
                 strcat(new_line, " ");
             }
             first_token = 0;
-
-            //check for は
-            if (strcmp(token, "は") == 0) {
-                strcat(new_line, "=");
+            //check for は/と and replace with new operator
+            if (strcmp(token, operator_particles[particle]) == 0) {
+                strcat(new_line, operators[operator]);
                 replacement++;
             } else {
                 //do checks and replace if needed

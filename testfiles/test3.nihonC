@@ -13,7 +13,7 @@
 
     // While loop
     整数 count は 0 です。
-    while (count < 5) 「
+    while (count は 5 より小さい) 「
         printf("Count is %d\n", count)。
         count++。
     」

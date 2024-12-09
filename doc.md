@@ -37,16 +37,24 @@ for (i = 0; i <= 5; i++)
 To be more precise you can always use the C for loop as well.
 
 
-### Assignments
-The syntax of assignments have been changed to fit Japanese grammar:
+### Operators
+The syntax of some operators have been changed to fit Japanese grammar:
 ```C
-... は ... です。
+A は B です //A = B
+A と B が等しい //A == B
+A は B と異なる //A != B
+A は B より大きい //A > B
+A は B より小さい //A < B
+A は B と等しいかより大きい //A >= B
+A は B と等しいかより小さい //A <= B
 ```
 Example:
 ```C
-イント count は 0 です。
+整数 count は 0 です。
+while (count は 5 より小さい) ...
 //turns into
 int count = 0;
+while (count < 5) ...
 ```
 
 ### If-else

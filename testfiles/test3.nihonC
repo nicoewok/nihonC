@@ -5,8 +5,8 @@
 
     //If statement
     整数 number = 10。
-    もし (number > 5) 「
-        printf("Number is greater than 5\n")。
+    もし (number は 5 と等しいかより大きい) 「
+        printf("Number is greater or equal than 5\n")。
     」 それ以外 「
         printf("Number is 5 or less\n")。
     」

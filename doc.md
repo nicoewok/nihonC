@@ -33,8 +33,10 @@ Example:
 //turns into
 for (i = 0; i <= 5; i++)
 ```
-
 To be more precise you can always use the C for loop as well.
+
+### While loops
+The **while** keyword has been replaced by **間**.
 
 
 ### Operators
@@ -60,3 +62,6 @@ while (count < 5) ...
 ### If-else
 **if** has been replace by **もし**.
 **else** has been replace by **それ以外**.
+
+### Preprocessor
+The preprocessor terms **define** and **include** have been replaced by **定義** and **組込** respectively.

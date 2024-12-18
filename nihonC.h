@@ -11,6 +11,8 @@ int replace_token(char *token, char *new_line);
 int replace_type(char *token, char *new_line);
 int replace_bracket(char *token, char *new_line);
 int replace_if_else(char *token, char *new_line);
+int replace_while(char *token, char *new_line);
+int replace_preprocessor(char *token, char *new_line);
 int replace_for(char *line, char *new_line);
 int replace_assignment(char *line, char *new_line, int operator, int particle);
 int complex_replacement(char *line, char *new_line);
@@ -27,6 +29,8 @@ int replace_token(char *token, char *new_line) {
     replacement += replace_type(token, new_line);
     replacement += replace_bracket(token, new_line);
     replacement += replace_if_else(token, new_line);
+    replacement += replace_while(token, new_line);
+    replacement += replace_preprocessor(token, new_line);
     return replacement;
 }
 
@@ -123,6 +127,26 @@ int replace_if_else(char *token, char *new_line) {
     }
     if (strcmp(token, "それ以外") == 0) {
         strcat(new_line, "else");
+        return 1;
+    }
+    return 0;
+}
+
+int replace_while(char *token, char *new_line) {
+    if (strcmp(token, "間") == 0) {
+        strcat(new_line, "while");
+        return 1;
+    }
+    return 0;
+}
+
+int replace_preprocessor(char *token, char *new_line) {
+    if (strcmp(token, "#定義") == 0) {
+        strcat(new_line, "#define");
+        return 1;
+    }
+    if (strcmp(token, "#組込") == 0) {
+        strcat(new_line, "#include");
         return 1;
     }
     return 0;

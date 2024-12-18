@@ -1,8 +1,13 @@
-#include <stdio.h>
+#組込 <stdio.h>
+#定義 LIMIT 10
+#define wd 10
 
 int main() 「
     // While loop
     整数 count は 0 です。
-
+    間 (count < LIMIT) 「
+        printf("count: %d\n", count);
+        count = count + 1;
+    」
     return 0。
 」

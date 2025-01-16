@@ -8,7 +8,7 @@ This is a list of all syntactical and keyword changes.
 
 ### Type names (WIP)
 The most common C type names were converted into  their Katakana counterpart:
-| C type  | Katakana        |
+| C type  | Japanese        |
 |---------|-----------------|
 | char    | 文字            |
 | int     | 整数            |
@@ -64,4 +64,14 @@ while (count < 5) ...
 **else** has been replace by **それ以外**.
 
 ### Preprocessor
-The preprocessor terms **define** and **include** have been replaced by **定義** and **組込** respectively.
+Here is a list of the translated preprocessor terms:
+
+| C       | Japanese        |
+|---------|-----------------|
+| define  | 定義            |
+| include | 組込            |
+| ifdef   | 定義ならば       |
+| if      | もし            |
+| else    | それ以外        |
+| elif    | それでなければ   |
+| endif   | 終わり          |

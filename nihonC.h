@@ -141,14 +141,39 @@ int replace_while(char *token, char *new_line) {
 }
 
 int replace_preprocessor(char *token, char *new_line) {
-    if (strcmp(token, "#定義") == 0) {
-        strcat(new_line, "#define");
-        return 1;
+    //Check if even preprocessor is used
+    if (token[0] == '#') {
+        if (strcmp(token, "#定義") == 0) {
+            strcat(new_line, "#define");
+            return 1;
+        }
+        if (strcmp(token, "#組込") == 0) {
+            strcat(new_line, "#include");
+            return 1;
+        }
+        if (strcmp(token, "#定義ならば") == 0) {
+            strcat(new_line, "#ifdef");
+            return 1;
+        }
+        if (strcmp(token, "#もし") == 0) {
+            strcat(new_line, "#if");
+            return 1;
+        }
+        if (strcmp(token, "#それ以外") == 0) {
+            strcat(new_line, "#else");
+            return 1;
+        }
+        if (strcmp(token, "#それでなければ") == 0) {
+            strcat(new_line, "#elif");
+            return 1;
+        }
+        if (strcmp(token, "#終わり") == 0) {
+            strcat(new_line, "#endif");
+            return 1;
+        }
     }
-    if (strcmp(token, "#組込") == 0) {
-        strcat(new_line, "#include");
-        return 1;
-    }
+
+    
     return 0;
 }
 

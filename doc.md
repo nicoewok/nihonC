@@ -29,7 +29,7 @@ The syntax of for-loops have changed:
 ```
 Example:
 ```C
-イント 0 から 5 まで i
+整数 0 から 5 まで i
 //turns into
 for (i = 0; i <= 5; i++)
 ```
